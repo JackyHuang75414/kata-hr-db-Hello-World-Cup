@@ -2,3 +2,5 @@ httpx
 pytest
 python-dotenv
 psycopg[binary]
+playwright
+pytest-playwright
