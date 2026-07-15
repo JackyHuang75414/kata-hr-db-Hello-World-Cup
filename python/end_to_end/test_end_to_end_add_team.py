@@ -1,19 +1,10 @@
+from pages import AddTeamPage, TeamsListPage
+
+
 def test_create_team(page):
-    # Make sure db is empty
-    page.goto("/reset_db")
-    proceed_button = page.locator("button:has-text('proceed')")
-    proceed_button.click()
+    add_team = AddTeamPage(page)
+    teams_list = TeamsListPage(page)
 
-    # Create a team
-    page.goto("/")
-    page.goto("/add_team")
-    name_input = page.locator('input[name="name"]')
-    team_name = "my team"
-    name_input.fill(team_name)
-    page.click("text='Add'")
-
-    # Goto the team list
-    page.goto("/teams")
-
-    # Check the new team is there
-    assert page.is_visible(f"td:has-text('{team_name}')")
+    add_team.create_team("my team")
+    teams_list.navigate()
+    assert teams_list.is_team_visible("my team")
