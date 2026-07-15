@@ -1,14 +1,15 @@
 # Part 4 — Reflection
 
-If you did everything right, you may realized you basically did the same test 3 times:
+Testing the same bug three times sounds like a waste of time at first. We found issues like negative zip codes and invalid dates during manual testing, wrote Playwright tests to prove them in the browser, then wrote integration tests to check the database directly. Same bug, three different tests. Why bother?
 
-- once by hand
-- once with playwright
-- once with integration tests
-- And we could imagine you could add a unit test.
+Turns out each layer tells us something different.
 
-So, basically, the same bug would covered by 4 different kind of tests.
+Manual testing is where everything starts. You mess around with the app, try weird inputs, and see what breaks. It's quick and creative, but you can't rerun it every time someone pushes code. Great for discovery, useless for regression.
 
-What do you think ?
+Playwright tests show us what the user actually sees. You can't tell if a delete confirmation page is blank just by looking at the database — you need a browser to see the HTML. But these tests are slow and flaky. A selector changes, and suddenly everything breaks even though the app works fine.
 
-Testing out our web app through different angles provides many interesting insights. Indeed, we've noticed that each testing method offers its advantages and disadvantages, therefore we should use adapated testing techniques depending on the context to reduce bugs in our web app.
+Integration tests skip the browser entirely. An HTTP POST followed by a SQL query tells you exactly what's in the database. Fast, reliable, no flaky DOM. But if the UI breaks on special characters? Integration tests won't catch that.
+
+We didn't have backend access, but if we did, unit tests would be the fourth layer — verifying that a function rejects bad input before it even touches the database. Fastest and most precise, but tells you nothing about the real user experience.
+
+The point isn't that we tested the same thing three times. It's that each test answers a different question: Is there a bug? Does the user see it? Is the data wrong? Having all three means the bug has nowhere to hide.
